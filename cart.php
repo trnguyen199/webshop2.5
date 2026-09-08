@@ -24,6 +24,10 @@
     <button onclick="removeSelectedItems()" style="border: 1px solid #ef4444; background: rgba(239, 68, 68, 0.1); color: #f87171; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600;">
       🗑️ Xóa sản phẩm đã chọn
     </button>
+
+    <button onclick="updateCart()" style="border: 1px solid #38bdf8; background: rgba(56, 189, 248, 0.1); color: #38bdf8; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600;">
+      ↻ Cập nhật giỏ hàng
+    </button>
   </div>
 
   <!-- DANH SÁCH SẢN PHẨM TRONG GIỎ -->
@@ -173,72 +177,12 @@ const SYSTEM_COUPONS = {
 let appliedCoupon = null;
 let currentOrderId = '';
 
-// ĐỒNG BỘ SỐ LƯỢNG GIỎ HÀNG VỚI ICON TRÊN HEADER
 function updateHeaderCartBadge() {
   const totalQty = cartItems.reduce((sum, item) => sum + item.qty, 0);
-  
-  // Tìm thẻ chứa số giỏ hàng trên Header (thường có class hoặc nằm trong thẻ giỏ hàng)
   const headerBadge = document.querySelector('.header-cart-badge, header .cart-count, [class*="cart"] span, [href*="cart"] span');
   if (headerBadge) {
     headerBadge.innerText = totalQty;
   }
-}
-
-function renderCart() {
-  const container = document.getElementById('cart-list');
-  container.innerHTML = '';
-
-  const inStockItems = cartItems.filter(i => i.inStock);
-  document.getElementById('total-stock-items').innerText = inStockItems.length;
-
-  if (cartItems.length === 0) {
-    container.innerHTML = `
-      <div style="text-align: center; padding: 50px 0; color: #94a3b8; background: #1e293b; border-radius: 12px; border: 1px solid #334155;">
-        <p style="font-size: 18px; margin-bottom: 12px;">Giỏ hàng của bạn đang trống!</p>
-        <a href="products.php" style="color: #38bdf8; text-decoration: underline; font-weight: 600;">Quay lại cửa hàng để mua sắm</a>
-      </div>
-    `;
-  } else {
-    cartItems.forEach(item => {
-      const itemTotal = item.price * item.qty;
-      container.innerHTML += `
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px; border: ${item.selected ? '2px solid #38bdf8' : '1px solid #334155'}; border-radius: 12px; background: ${item.inStock ? '#1e293b' : '#0f172a'}; opacity: ${item.inStock ? 1 : 0.6}">
-          
-          <input type="checkbox" ${item.selected ? 'checked' : ''} ${!item.inStock ? 'disabled' : ''} onchange="toggleSelect(${item.id})" style="width: 18px; height: 18px; cursor: ${item.inStock ? 'pointer' : 'not-allowed'}; margin-right: 10px; accent-color: #38bdf8;">
-          
-          <img src="${item.img}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px; margin-right: 14px; border: 1px solid #334155;">
-          
-          <div style="flex: 1;">
-            <h4 style="margin: 0 0 6px 0; font-size: 16px; color: #f8fafc;">${item.name}</h4>
-            <span style="font-size: 12px; color: #94a3b8; background: #0f172a; padding: 3px 8px; border-radius: 4px; display: inline-block; border: 1px solid #334155;">Biến thể: ${item.variant}</span>
-            <div style="font-size: 12px; margin-top: 6px;">
-              ${item.inStock ? `<span style="color: #4ade80; font-weight: 600;">✓ Tồn kho: ${item.stock} sp</span>` : '<span style="color: #f87171; font-weight: 600;">✕ Tình trạng: Hết hàng</span>'}
-            </div>
-          </div>
-
-          <div style="text-align: right; margin-right: 20px;">
-            <strong style="color: #f87171; font-size: 16px;">${item.price.toLocaleString('vi-VN')} đ</strong>
-            ${item.origPrice > item.price ? `<div style="color: #64748b; text-decoration: line-through; font-size: 12px;">${item.origPrice.toLocaleString('vi-VN')} đ</div>` : ''}
-          </div>
-
-          <div style="display: flex; align-items: center; gap: 4px; background: #0f172a; padding: 4px; border-radius: 6px; border: 1px solid #334155;">
-            <button ${!item.inStock ? 'disabled' : ''} onclick="changeQty(${item.id}, -1)" style="border:none; background:#1e293b; color:#fff; cursor:pointer; width:28px; height:28px; border-radius:4px; font-weight:bold;">-</button>
-            <input type="number" ${!item.inStock ? 'disabled' : ''} value="${item.qty}" onchange="directQty(${item.id}, this.value)" style="width: 40px; text-align: center; border: none; background: transparent; font-weight: bold; color: #ffffff; outline: none;">
-            <button ${!item.inStock ? 'disabled' : ''} onclick="changeQty(${item.id}, 1)" style="border:none; background:#1e293b; color:#fff; cursor:pointer; width:28px; height:28px; border-radius:4px; font-weight:bold;">+</button>
-          </div>
-
-          <strong style="width: 120px; text-align: right; font-size: 16px; margin-left: 14px; color: #f8fafc;">
-            ${itemTotal.toLocaleString('vi-VN')} đ
-          </strong>
-
-          <button onclick="removeItem(${item.id})" style="color: #f87171; border: 1px solid #ef4444; background: rgba(239, 68, 68, 0.1); padding: 8px; border-radius: 6px; cursor: pointer; margin-left: 14px;">✕</button>
-        </div>
-      `;
-    });
-  }
-
-  calculateTotal();
-  updateHeaderCartBadge();
 }
 
 function toggleSelect(id) {
@@ -284,17 +228,8 @@ function removeItem(id) {
   renderCart();
 }
 
-function removeSelectedItems() {
-  const selectedCount = cartItems.filter(i => i.selected).length;
-  if (selectedCount === 0) {
-    alert('Vui lòng chọn ít nhất 1 sản phẩm để xóa!');
-    return;
-  }
-  if (confirm(`Bạn có chắc muốn xóa ${selectedCount} sản phẩm đã chọn?`)) {
-    cartItems = cartItems.filter(i => !i.selected);
-    renderCart();
-  }
-}// 1. CẬP NHẬT HÀM RENDER GIỎ HÀNG (Ẩn bảng tính tiền khi trống hẳn)
+}
+
 function renderCart() {
   const container = document.getElementById('cart-list');
   container.innerHTML = '';
@@ -302,8 +237,13 @@ function renderCart() {
   const inStockItems = cartItems.filter(i => i.inStock);
   document.getElementById('total-stock-items').innerText = inStockItems.length;
 
+  const selectAll = document.getElementById('select-all');
+  const allSelected = inStockItems.length > 0 && inStockItems.every(i => i.selected);
+  const someSelected = inStockItems.some(i => i.selected);
+  selectAll.checked = allSelected;
+  selectAll.indeterminate = someSelected && !allSelected;
+
   if (cartItems.length === 0) {
-    // Ẩn thanh chọn tất cả và khu vực tổng kết tiền khi giỏ rỗng
     document.querySelector('.page-main > div:nth-child(2)').style.display = 'none'; 
     document.querySelector('.page-main > div:nth-child(4)').style.display = 'none'; 
     
@@ -314,7 +254,6 @@ function renderCart() {
       </div>
     `;
   } else {
-    // Hiện lại nếu có sản phẩm
     document.querySelector('.page-main > div:nth-child(2)').style.display = 'flex';
     document.querySelector('.page-main > div:nth-child(4)').style.display = 'grid';
 
@@ -323,7 +262,6 @@ function renderCart() {
       container.innerHTML += `
         <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px; border: ${item.selected ? '2px solid #38bdf8' : '1px solid #334155'}; border-radius: 12px; background: ${item.inStock ? '#1e293b' : '#0f172a'}; opacity: ${item.inStock ? 1 : 0.7}">
           
-          <!-- Bỏ disabled ở checkbox để user vẫn chọn xóa được -->
           <input type="checkbox" ${item.selected ? 'checked' : ''} onchange="toggleSelect(${item.id})" style="width: 18px; height: 18px; cursor: pointer; margin-right: 10px; accent-color: #38bdf8;">
           
           <img src="${item.img}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px; margin-right: 14px; border: 1px solid #334155;">
@@ -351,7 +289,6 @@ function renderCart() {
             ${itemTotal.toLocaleString('vi-VN')} đ
           </strong>
 
-          <!-- Nút xóa trực tiếp từng món -->
           <button onclick="removeItem(${item.id})" style="color: #f87171; border: 1px solid #ef4444; background: rgba(239, 68, 68, 0.1); padding: 8px; border-radius: 6px; cursor: pointer; margin-left: 14px;">✕</button>
         </div>
       `;
@@ -373,6 +310,11 @@ function removeSelectedItems() {
     cartItems = cartItems.filter(i => !i.selected);
     renderCart();
   }
+}
+
+function updateCart() {
+  renderCart();
+  alert('Giỏ hàng đã được cập nhật!');
 }
 
 function calculateTotal() {
@@ -485,8 +427,7 @@ function confirmOrder() {
   document.getElementById('checkout-section').style.display = 'none';
   renderCart();
 }
-cartItems = cartItems.filter(item => item.inStock && item.stock > 0);
-renderCart();
+
 </script>
 
 <?php require __DIR__ . '/partials/footer.php'; ?>
