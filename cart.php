@@ -385,11 +385,16 @@ function goToCheckout() {
     alert('Vui lòng chọn ít nhất 1 sản phẩm còn hàng để thanh toán!');
     return;
   }
-  currentOrderId = 'GZ' + Math.floor(100000 + Math.random() * 900000);
-  document.getElementById('order-id').innerText = currentOrderId;
-  document.getElementById('checkout-section').style.display = 'block';
-  updateQR();
-  document.getElementById('checkout-section').scrollIntoView({ behavior: 'smooth' });
+  const subTotal = selected.reduce((sum, item) => sum + item.price * item.qty, 0);
+  let discount = 0;
+  if (appliedCoupon) {
+    discount = appliedCoupon.type === 'percent' ? (subTotal * appliedCoupon.value) / 100 : appliedCoupon.value;
+  }
+  sessionStorage.setItem('checkoutData', JSON.stringify({
+    items: selected,
+    discount: Math.min(discount, subTotal)
+  }));
+  window.location.href = 'checkout.php';
 }
 
 function updateQR() {
@@ -428,6 +433,7 @@ function confirmOrder() {
   renderCart();
 }
 
+renderCart();
 </script>
 
 <?php require __DIR__ . '/partials/footer.php'; ?>
