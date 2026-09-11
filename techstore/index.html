@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tin Tức Công Nghệ - TechStore</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="index.html" class="logo">
+                <span>TECH</span>
+                <strong>STORE</strong>
+            </a>
+            <nav class="main-nav">
+                <a href="index.html" class="active">Tin Tức</a>
+                <a href="contact.html">Liên Hệ</a>
+            </nav>
+            <div class="header-actions">
+                <span class="hotline">Hotline: <a href="tel:19006789">1900 6789</a></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-main container">
+        <p class="eyebrow">Cập Nhật Mới Nhất</p>
+        <h1>Tin Tức & Công Nghệ</h1>
+
+        <div class="filter-bar">
+            <input type="text" id="search-input" placeholder="Tìm kiếm tin tức...">
+            <select id="category-select">
+                <option value="all">Tất cả danh mục</option>
+                <option value="Tin công nghệ">Tin công nghệ</option>
+                <option value="Sản phẩm mới">Sản phẩm mới</option>
+                <option value="Khuyến mãi">Khuyến mãi</option>
+                <option value="Hướng dẫn">Hướng dẫn</option>
+                <option value="Đánh giá">Đánh giá</option>
+            </select>
+            <select id="sort-select">
+                <option value="newest">Mới nhất</option>
+                <option value="oldest">Cũ nhất</option>
+                <option value="views">Xem nhiều nhất</option>
+            </select>
+        </div>
+
+        <section class="content-list" id="news-list"></section>
+
+        <div class="pagination" id="pagination"></div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <strong>TechStore Việt Nam</strong>
+                <p>Chuyên cung cấp sản phẩm công nghệ cao cấp chính hãng.</p>
+            </div>
+            <div>
+                <strong>Liên Kết</strong>
+                <a href="index.html">Tin Tức</a>
+                <a href="contact.html">Liên Hệ</a>
+            </div>
+            <div>
+                <strong>Thông Tin</strong>
+                <p>02 Võ Oanh, Thạnh Mỹ Tây, Bình Thạnh, TP.HCM</p>
+                <p>Email: cskh@techstore.vn</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2026 TechStore Việt Nam. Tất cả quyền được bảo lưu.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
