@@ -1,0 +1,297 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f0f2f5;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.auth-container {
+    width: 100%;
+    max-width: 450px;
+}
+
+
+/* =========================
+   BOX
+========================= */
+
+.auth-box {
+    background: #ffffff;
+
+    padding: 35px;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.auth-header h1 {
+    font-size: 28px;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.auth-header p {
+    color: #777;
+    font-size: 14px;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+
+    padding: 12px 14px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition: 0.2s;
+}
+
+.form-group input:focus {
+    border-color: #c98ca8;
+
+    box-shadow:
+        0 0 0 3px rgba(201, 140, 168, 0.12);
+}
+
+
+/* =========================
+   PASSWORD
+========================= */
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    padding-right: 45px;
+}
+
+.show-password {
+    position: absolute;
+
+    right: 10px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    border: none;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    font-size: 16px;
+}
+
+
+/* =========================
+   NOTE
+========================= */
+
+.password-note {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #888;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+.error {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #e74c3c;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
+.auth-button {
+    width: 100%;
+
+    padding: 13px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #d99ab8;
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.auth-button:hover {
+    background: #c987a8;
+}
+
+.auth-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* =========================
+   FORGOT
+========================= */
+
+.forgot-link {
+    text-align: right;
+
+    margin-bottom: 20px;
+}
+
+.forgot-link a {
+    color: #b96f93;
+
+    font-size: 13px;
+
+    text-decoration: none;
+}
+
+.forgot-link a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.message {
+    margin-top: 15px;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+.message.success {
+    color: #269b5b;
+}
+
+.message.error-message {
+    color: #e74c3c;
+}
+
+
+/* =========================
+   SWITCH PAGE
+========================= */
+
+.switch-page {
+    text-align: center;
+
+    margin-top: 25px;
+
+    font-size: 14px;
+
+    color: #777;
+}
+
+.switch-page a {
+    color: #b96f93;
+
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.switch-page a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 500px) {
+
+    body {
+        padding: 15px;
+    }
+
+    .auth-box {
+        padding: 25px 20px;
+    }
+
+    .auth-header h1 {
+        font-size: 24px;
+    }
+
+}

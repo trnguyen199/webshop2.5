@@ -1,22 +1,43 @@
 <?php
-$pageTitle = 'Trang chủ';
-require __DIR__ . '/partials/header.php';
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+require_once __DIR__ . '/config/db.php';
+
+$sql = "SELECT * FROM products";
+$result = $conn->query($sql);
 ?>
-<main>
-    <section class="hero-banner">
-        <div class="hero-content">
-            <p class="slider-label">Slider 1</p>
-            <p class="eyebrow">GearZone Shop</p>
-            <h1>Công nghệ hiện đại<br>Cho nhịp sống mới</h1>
-            <p>Thiết bị chính hãng, trải nghiệm khác biệt</p>
-            <a class="button" href="products.php">Mua ngay</a>
-        </div>
-    </section>
-    <section class="intro container">
-        <p class="eyebrow">Sản phẩm nổi bật</p>
-        <h2>Thiết bị bạn cần, trải nghiệm bạn muốn</h2>
-        <p>Khám phá laptop, điện thoại, phụ kiện và thiết bị thông minh cho công việc, học tập và giải trí.</p>
-        <a class="text-link" href="products.php">Xem tất cả sản phẩm</a>
-    </section>
-</main>
-<?php require __DIR__ . '/partials/footer.php'; ?>
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Webshop của tôi</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
+        h1 { color: #333; }
+        .product-list { display: flex; gap: 20px; flex-wrap: wrap; }
+        .product-card { background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 8px; width: 220px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .price { color: #e44d26; font-weight: bold; font-size: 1.1em; }
+    </style>
+</head>
+<body>
+
+    <h1>Danh Sách Sản Phẩm Webshop</h1>
+
+    <div class="product-list">
+        <?php if ($result && $result->num_rows > 0): ?>
+            <?php while($row = $result->fetch_assoc()): ?>
+                <div class="product-card">
+                    <h3><?php echo htmlspecialchars($row['name']); ?></h3>
+                    <p class="price"><?php echo number_format($row['price'], 0, ',', '.'); ?> VNĐ</p>
+                    <p><?php echo htmlspecialchars($row['description']); ?></p>
+                </div>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <p>Chưa có sản phẩm nào trong cơ sở dữ liệu.</p>
+        <?php endif; ?>
+    </div>
+
+</body>
+</html>
