@@ -34,8 +34,8 @@ $adminRole = $_SESSION["admin_role"];
 
     <link
         rel="stylesheet"
-        href="admin.css"
-    >
+        href="admin.css?v=2.0">
+    
 
 </head>
 
@@ -186,60 +186,27 @@ $adminRole = $_SESSION["admin_role"];
             <h2 class="section-title">
                 📊 Tổng quan
             </h2>
+        <div class="dashboard-grid">
 
-            <div class="dashboard-grid">
+    <a href="users.php" class="dashboard-card">
+        <div class="card-icon">👤</div>
+        <h3>Tài khoản</h3>
+        <p>Quản lý tài khoản người dùng</p>
+    </a>
 
-                <div class="dashboard-card">
+    <a href="orders.php" class="dashboard-card">
+        <div class="card-icon">📦</div>
+        <h3>Đơn hàng</h3>
+        <p>Theo dõi và quản lý đơn hàng</p>
+    </a>
 
-                    <div class="card-icon">
-                        👤
-                    </div>
+    <a href="security.php" class="dashboard-card">
+        <div class="card-icon">🔐</div>
+        <h3>Bảo mật</h3>
+        <p>Quản lý phiên đăng nhập Admin</p>
+    </a>
 
-                    <h3>
-                        Tài khoản
-                    </h3>
-
-                    <p>
-                        Quản lý tài khoản người dùng
-                    </p>
-
-                </div>
-
-
-                <div class="dashboard-card">
-
-                    <div class="card-icon">
-                        📦
-                    </div>
-
-                    <h3>
-                        Đơn hàng
-                    </h3>
-
-                    <p>
-                        Theo dõi và quản lý đơn hàng
-                    </p>
-
-                </div>
-
-
-                <div class="dashboard-card">
-
-                    <div class="card-icon">
-                        🔐
-                    </div>
-
-                    <h3>
-                        Bảo mật
-                    </h3>
-
-                    <p>
-                        Quản lý phiên đăng nhập Admin
-                    </p>
-
-                </div>
-
-            </div>
+</div>
 
         </section>
 

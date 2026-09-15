@@ -16,8 +16,6 @@ body {
 }
 
 
-/* SIDEBAR */
-
 .sidebar {
     width: 250px;
     background: white;
@@ -71,8 +69,6 @@ body {
 }
 
 
-/* CONTENT */
-
 .content {
     flex: 1;
     padding: 35px;
@@ -103,8 +99,6 @@ body {
 }
 
 
-/* CARD */
-
 .card {
     background: white;
     border-radius: 12px;
@@ -114,41 +108,14 @@ body {
 }
 
 
-/* PROFILE */
-
 .profile-card {
     display: flex;
     gap: 45px;
 }
 
-.avatar-area {
-    width: 150px;
-    text-align: center;
-}
-
-.avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: #f5dce8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 50px;
-    margin: auto auto 10px;
-}
-
-.avatar-area p {
-    font-size: 13px;
-    color: #777;
-}
-
 .profile-form {
     flex: 1;
 }
-
-
-/* FORM */
 
 .form-group {
     margin-bottom: 18px;
@@ -380,10 +347,6 @@ body {
 
     .profile-card {
         flex-direction: column;
-    }
-
-    .avatar-area {
-        width: 100%;
     }
 
     .form-row {

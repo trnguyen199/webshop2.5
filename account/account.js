@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
+
     loadProfile();
     loadAddresses();
     loadOrders();
+
 });
 
 
@@ -71,13 +73,6 @@ async function loadProfile() {
         document.getElementById("sidebarName").textContent =
             "Xin chào, " + (user.name || "bạn");
 
-        if (user.avatar) {
-
-            document.getElementById("avatar").innerHTML =
-                `<img src="${escapeHtml(user.avatar)}" alt="Avatar">`;
-
-        }
-
     } catch (error) {
 
         console.error(error);
@@ -118,9 +113,10 @@ async function updateProfile() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    name: name,
-                    phone: phone
-                })
+    name: name,
+    email: document.getElementById("profileEmail").value.trim(),
+    phone: phone
+})
             }
         );
 
@@ -161,6 +157,7 @@ async function changePassword() {
     const confirmPassword =
         document.getElementById("confirmPassword").value;
 
+
     if (
         currentPassword === "" ||
         newPassword === "" ||
@@ -175,37 +172,92 @@ async function changePassword() {
         return;
     }
 
+
+    if (newPassword.length < 6) {
+
+        showMessage(
+            "Mật khẩu mới phải có ít nhất 6 ký tự.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (newPassword !== confirmPassword) {
+
+        showMessage(
+            "Mật khẩu xác nhận không khớp.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (currentPassword === newPassword) {
+
+        showMessage(
+            "Mật khẩu mới phải khác mật khẩu hiện tại.",
+            "error"
+        );
+
+        return;
+    }
+
+
     try {
 
         const response = await fetch(
             "../api/change-password.php",
             {
                 method: "POST",
+
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type":
+                        "application/x-www-form-urlencoded; charset=UTF-8"
                 },
-                body: JSON.stringify({
-                    currentPassword,
-                    newPassword,
-                    confirmPassword
-                })
+
+                body:
+                    "current_password=" +
+                    encodeURIComponent(currentPassword) +
+
+                    "&new_password=" +
+                    encodeURIComponent(newPassword)
             }
         );
 
+
         const data = await response.json();
+
 
         if (data.success) {
 
             showMessage(data.message);
 
-            document.getElementById("currentPassword").value = "";
-            document.getElementById("newPassword").value = "";
-            document.getElementById("confirmPassword").value = "";
+
+            document.getElementById(
+                "currentPassword"
+            ).value = "";
+
+            document.getElementById(
+                "newPassword"
+            ).value = "";
+
+            document.getElementById(
+                "confirmPassword"
+            ).value = "";
+
 
         } else {
 
-            showMessage(data.message, "error");
+            showMessage(
+                data.message,
+                "error"
+            );
+
         }
+
 
     } catch (error) {
 
