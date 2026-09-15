@@ -1,143 +1,721 @@
 /* =========================
-   AUTH - ĐĂNG NHẬP / ĐĂNG KÝ
-   ========================= */
+   RESET
+========================= */
 
-.auth-page {
-    min-height: calc(100vh - 118px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 60px 20px;
-    background: #eef1f5;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+
+/* =========================
+   BODY
+========================= */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: #f5f5f5;
+
+    color: #333;
+}
+
+
+/* =========================
+   AUTH CONTAINER
+========================= */
+
 .auth-container {
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 30px 20px;
+}
+
+
+/* =========================
+   AUTH BOX
+========================= */
+
+.auth-box {
     width: 100%;
+
+    max-width: 480px;
+
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 35px 40px;
+
+    box-shadow:
+        0 3px 15px
+        rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================
+   ADMIN BOX
+========================= */
+
+.admin-auth-box {
     max-width: 480px;
 }
 
-.auth-card {
-    background: #ffffff;
-    border: 1px solid #d5dde5;
-    border-radius: 14px;
-    padding: 35px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-}
 
-.auth-card h1 {
-    margin: 0 0 10px;
+/* =========================
+   HEADER
+========================= */
+
+.auth-header {
     text-align: center;
-    color: #111820;
-    font-size: 32px;
+
+    margin-bottom: 30px;
 }
 
-.auth-description {
-    text-align: center;
-    color: #66727f;
-    margin-bottom: 28px;
+
+/* =========================
+   ADMIN ICON
+========================= */
+
+.admin-icon {
+    width: 60px;
+
+    height: 60px;
+
+    margin: 0 auto 15px;
+
+    border-radius: 50%;
+
+    background: #f5dce8;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 28px;
 }
 
-.auth-form {
-    display: grid;
-    gap: 16px;
+
+/* =========================
+   TITLE
+========================= */
+
+.auth-header h1 {
+    font-size: 28px;
+
+    margin-bottom: 10px;
+
+    color: #333;
 }
 
-.auth-form label {
-    display: block;
-    margin-bottom: 7px;
-    font-weight: 700;
-    color: #17202b;
-}
 
-.auth-form input {
-    width: 100%;
-    padding: 13px 14px;
-    border: 1px solid #b8c4d0;
-    border-radius: 8px;
-    font-size: 15px;
-    outline: none;
-    transition: 0.2s;
-}
+/* =========================
+   SUBTITLE
+========================= */
 
-.auth-form input:focus {
-    border-color: #00a9c7;
-    box-shadow: 0 0 0 3px rgba(0, 169, 199, 0.12);
-}
+.auth-header p,
+.auth-subtitle {
+    color: #777;
 
-.auth-button {
-    width: 100%;
-    padding: 14px;
-    border: 0;
-    border-radius: 8px;
-    background: #ff6b35;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.auth-button:hover {
-    background: #e95624;
-    transform: translateY(-1px);
-}
-
-.auth-message {
-    margin-top: 15px;
-    padding: 12px;
-    border-radius: 8px;
-    text-align: center;
     font-size: 14px;
+
+    line-height: 1.6;
 }
 
-.auth-links {
-    margin-top: 20px;
-    text-align: center;
+
+/* =========================
+   FORM
+========================= */
+
+.form-group {
+    margin-bottom: 20px;
 }
 
-.auth-links a {
-    color: #008da8;
-    font-weight: bold;
+
+/* =========================
+   LABEL
+========================= */
+
+.form-group label {
+    display: block;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    margin-bottom: 8px;
 }
 
-.auth-links a:hover {
-    color: #006f83;
-    text-decoration: underline;
+
+.form-group label span {
+    color: #e74c3c;
 }
 
-.password-group {
+
+/* =========================
+   INPUT
+========================= */
+
+.form-group input {
+    width: 100%;
+
+    padding: 13px 14px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
+    outline: none;
+
+    font-size: 14px;
+
+    background: white;
+
+    color: #333;
+
+    transition: 0.2s;
+}
+
+
+.form-group input::placeholder {
+    color: #aaa;
+}
+
+
+.form-group input:focus {
+    border-color: #c987a8;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(201, 135, 168, 0.1);
+}
+
+
+/* =========================
+   PASSWORD BOX
+========================= */
+
+.password-box {
     position: relative;
+
+    width: 100%;
 }
 
-.password-group input {
+
+.password-box input {
     padding-right: 50px;
 }
 
-.toggle-password {
+
+/* =========================
+   SHOW PASSWORD
+========================= */
+
+.show-password {
     position: absolute;
-    right: 12px;
-    bottom: 11px;
-    border: 0;
+
+    right: 5px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 40px;
+
+    height: 40px;
+
+    border: none;
+
     background: transparent;
+
     cursor: pointer;
+
+    font-size: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 6px;
+}
+
+
+.show-password:hover {
+    background: #f9edf3;
+}
+
+
+/* =========================
+   ERROR TEXT
+========================= */
+
+.error {
+    color: #c0392b;
+
+    font-size: 12px;
+
+    margin-top: 5px;
+
+    display: block;
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.message {
+    display: none;
+
+    padding: 12px 15px;
+
+    border-radius: 8px;
+
+    margin-bottom: 18px;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+.message.success {
+    display: block;
+
+    background: #e9f8ef;
+
+    color: #25854b;
+}
+
+
+.message.error {
+    display: block;
+
+    background: #fdecec;
+
+    color: #c0392b;
+}
+
+
+/* =========================
+   AUTH BUTTON
+========================= */
+
+.auth-button {
+    width: 100%;
+
+    border: none;
+
+    background: #d99ab8;
+
+    color: white;
+
+    padding: 13px 18px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+
+.auth-button:hover {
+    background: #c987a8;
+}
+
+
+.auth-button:active {
+    transform: translateY(1px);
+}
+
+
+/* =========================
+   FORGOT LINK
+========================= */
+
+.forgot-link {
+    text-align: right;
+
+    margin-top: -8px;
+
+    margin-bottom: 20px;
+}
+
+
+.forgot-link a {
+    color: #a95f83;
+
+    text-decoration: none;
+
+    font-size: 13px;
+}
+
+
+.forgot-link a:hover {
+    color: #c987a8;
+
+    text-decoration: underline;
+}
+
+
+/* =========================
+   SWITCH PAGE
+========================= */
+
+.switch-page {
+    text-align: center;
+
+    margin-top: 20px;
+
+    font-size: 14px;
+
+    color: #777;
+}
+
+
+.switch-page a {
+    color: #a95f83;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+    margin-left: 4px;
+}
+
+
+.switch-page a:hover {
+    color: #c987a8;
+
+    text-decoration: underline;
+}
+
+
+/* =========================
+   BACK LOGIN
+========================= */
+
+.back-login {
+    text-align: center;
+
+    margin-top: 22px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #eee;
+}
+
+
+.back-login a {
+    color: #a95f83;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+.back-login a:hover {
+    color: #c987a8;
+
+    text-decoration: underline;
+}
+
+
+/* =========================
+   DIVIDER
+========================= */
+
+.divider {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin: 28px 0 20px;
+
+    color: #999;
+
+    font-size: 13px;
+
+    text-align: center;
+}
+
+
+.divider::before,
+.divider::after {
+    content: "";
+
+    flex: 1;
+
+    height: 1px;
+
+    background: #eee;
+}
+
+
+.divider span {
+    white-space: nowrap;
+}
+
+
+/* =========================
+   SOCIAL LOGIN
+========================= */
+
+.social-login {
+    display: flex;
+
+    gap: 12px;
+}
+
+
+.social-button {
+    flex: 1;
+
+    height: 44px;
+
+    border: 1px solid #ddd;
+
+    background: white;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #444;
+
+    transition: 0.2s;
+}
+
+
+.social-button:hover {
+    background: #f7f7f7;
+
+    border-color: #ccc;
+}
+
+
+/* =========================
+   SOCIAL ICON
+========================= */
+
+.social-icon {
+    width: 22px;
+
+    height: 22px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-weight: bold;
+
     font-size: 16px;
 }
 
+
+/* FACEBOOK */
+
+.facebook-button .social-icon {
+    color: #1877f2;
+}
+
+
+/* GOOGLE */
+
+.google-button .social-icon {
+    color: #4285f4;
+}
+
+
 /* =========================
-   MOBILE
-   ========================= */
+   REGISTER / FORM SUPPORT
+========================= */
 
-@media (max-width: 620px) {
+.form-row {
+    display: flex;
 
-    .auth-page {
-        padding: 35px 16px;
+    gap: 15px;
+}
+
+
+.form-row .form-group {
+    flex: 1;
+}
+
+
+/* =========================
+   SMALL NOTE
+========================= */
+
+.auth-note {
+    text-align: center;
+
+    color: #777;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    margin-bottom: 20px;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+
+    .auth-container {
+        padding: 20px 15px;
     }
 
-    .auth-card {
-        padding: 25px 20px;
+
+    .auth-box {
+        padding: 28px 22px;
+
+        border-radius: 10px;
     }
 
-    .auth-card h1 {
-        font-size: 27px;
+
+    .auth-header h1 {
+        font-size: 25px;
     }
+
+
+    .admin-icon {
+        width: 55px;
+
+        height: 55px;
+
+        font-size: 25px;
+    }
+
+
+    .form-row {
+        flex-direction: column;
+
+        gap: 0;
+    }
+
+
+    .social-login {
+        flex-direction: column;
+    }
+
+
+    .social-button {
+        width: 100%;
+    }
+
+}
+
+/* Bổ sung để khớp class với HTML */
+.auth-card {
+    width: 100%;
+    max-width: 480px;
+    background: white;
+    border-radius: 12px;
+    padding: 35px 40px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+}
+
+.auth-link {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #777;
+}
+
+.auth-link a {
+    color: #a95f83;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 4px;
+}
+
+.auth-link a:hover {
+    color: #c987a8;
+    text-decoration: underline;
+}
+
+/* =========================
+   FIX PASSWORD BOX & SHOW BUTTON
+========================= */
+
+.password-box {
+    position: relative !important;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.password-box input {
+    width: 100%;
+    padding-right: 45px !important; /* Dành khoảng trống cho nút con mắt */
+}
+
+.show-password {
+    position: absolute !important;
+    right: 8px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 32px;
+    height: 32px;
+    border: none !important;
+    background: transparent !important;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    z-index: 2;
+}
+
+.show-password:hover {
+    background: rgba(0, 0, 0, 0.05) !important;
+    border-radius: 50%;
+}
+
+.message.info {
+    display: block;
+    background: #f5f5f5;
+    color: #555;
 }

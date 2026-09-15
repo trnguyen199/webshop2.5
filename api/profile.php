@@ -4,7 +4,12 @@ session_start();
 
 header("Content-Type: application/json; charset=UTF-8");
 
-require_once "db.php";
+require_once "../config/db.php";
+
+
+/* ==============================
+   KIỂM TRA ĐĂNG NHẬP
+============================== */
 
 if (!isset($_SESSION["user_id"])) {
 
@@ -18,76 +23,187 @@ if (!isset($_SESSION["user_id"])) {
     exit;
 }
 
-$userId = $_SESSION["user_id"];
+
+$userId = (int) $_SESSION["user_id"];
+
+
+/* ==============================
+   LẤY THÔNG TIN TÀI KHOẢN
+============================== */
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
-    $stmt = $pdo->prepare("
-        SELECT id, name, email, phone, avatar, role, created_at
-        FROM users
-        WHERE id = ?
-    ");
+    try {
 
-    $stmt->execute([$userId]);
+        $stmt = $pdo->prepare("
+            SELECT
+              id,
+              name,
+              email,
+              phone,
+              role,
+              created_at
+            FROM users
+            WHERE id = ?
+            LIMIT 1
+        ");
 
-    $user = $stmt->fetch();
+        $stmt->execute([$userId]);
 
-    if (!$user) {
+        $user = $stmt->fetch();
+
+
+        if (!$user) {
+
+            echo json_encode([
+                "success" => false,
+                "message" => "Không tìm thấy tài khoản."
+            ]);
+
+            exit;
+        }
+
+
+        echo json_encode([
+            "success" => true,
+            "user" => $user
+        ]);
+
+    } catch (PDOException $e) {
+
+        http_response_code(500);
 
         echo json_encode([
             "success" => false,
-            "message" => "Không tìm thấy tài khoản."
+            "message" => "Lỗi database."
         ]);
-
-        exit;
     }
-
-    echo json_encode([
-        "success" => true,
-        "user" => $user
-    ]);
 
     exit;
 }
+
+
+/* ==============================
+   CẬP NHẬT THÔNG TIN
+============================== */
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $data = json_decode(file_get_contents("php://input"), true);
+    try {
 
-    $name = trim($data["name"] ?? "");
-    $phone = trim($data["phone"] ?? "");
+        $data = json_decode(
+            file_get_contents("php://input"),
+            true
+        );
 
-    if ($name === "") {
+
+        $name = trim($data["name"] ?? "");
+        $phone = trim($data["phone"] ?? "");
+        $email = trim($data["email"] ?? "");
+
+
+        /* Kiểm tra họ tên */
+
+        if ($name === "") {
+
+            echo json_encode([
+                "success" => false,
+                "message" => "Họ tên không được để trống."
+            ]);
+
+            exit;
+        }
+
+
+        /* Kiểm tra email */
+
+        if ($email !== "" && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+            echo json_encode([
+                "success" => false,
+                "message" => "Email không hợp lệ."
+            ]);
+
+            exit;
+        }
+
+
+        /* Kiểm tra email trùng */
+
+        if ($email !== "") {
+
+            $stmt = $pdo->prepare("
+                SELECT id
+                FROM users
+                WHERE email = ?
+                AND id != ?
+                LIMIT 1
+            ");
+
+            $stmt->execute([
+                $email,
+                $userId
+            ]);
+
+            if ($stmt->fetch()) {
+
+                echo json_encode([
+                    "success" => false,
+                    "message" => "Email này đã được sử dụng bởi tài khoản khác."
+                ]);
+
+                exit;
+            }
+        }
+
+
+        /* Cập nhật database */
+
+        $stmt = $pdo->prepare("
+            UPDATE users
+            SET
+                name = ?,
+                email = ?,
+                phone = ?
+            WHERE id = ?
+        ");
+
+        $stmt->execute([
+            $name,
+            $email,
+            $phone !== "" ? $phone : null,
+            $userId
+        ]);
+
+
+        /* Cập nhật session */
+
+        $_SESSION["user_name"] = $name;
+        $_SESSION["user_email"] = $email;
+
+
+        echo json_encode([
+            "success" => true,
+            "message" => "Cập nhật thông tin thành công."
+        ]);
+
+    } catch (PDOException $e) {
+
+        http_response_code(500);
 
         echo json_encode([
             "success" => false,
-            "message" => "Họ tên không được để trống."
+            "message" => "Lỗi database: " . $e->getMessage()
         ]);
-
-        exit;
     }
-
-    $stmt = $pdo->prepare("
-        UPDATE users
-        SET name = ?, phone = ?
-        WHERE id = ?
-    ");
-
-    $stmt->execute([
-        $name,
-        $phone !== "" ? $phone : null,
-        $userId
-    ]);
-
-    $_SESSION["user_name"] = $name;
-
-    echo json_encode([
-        "success" => true,
-        "message" => "Cập nhật thông tin thành công."
-    ]);
 
     exit;
 }
+
+
+/* ==============================
+   METHOD KHÔNG HỖ TRỢ
+============================== */
 
 http_response_code(405);
 
@@ -95,4 +211,5 @@ echo json_encode([
     "success" => false,
     "message" => "Phương thức không được hỗ trợ."
 ]);
+
 ?>

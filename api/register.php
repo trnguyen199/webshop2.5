@@ -9,13 +9,7 @@ $email = trim($_POST["email"] ?? "");
 $phone = trim($_POST["phone"] ?? "");
 $password = $_POST["password"] ?? "";
 
-
-if (
-    $name === "" ||
-    $email === "" ||
-    $phone === "" ||
-    $password === ""
-) {
+if ($name === "" || $email === "" || $phone === "" || $password === "") {
     echo json_encode([
         "success" => false,
         "message" => "Vui lòng nhập đầy đủ thông tin."
@@ -23,29 +17,23 @@ if (
     exit;
 }
 
-
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-
     echo json_encode([
         "success" => false,
         "message" => "Email không hợp lệ."
     ]);
-
     exit;
 }
 
-
 if (strlen($password) < 6) {
-
     echo json_encode([
         "success" => false,
         "message" => "Mật khẩu phải có ít nhất 6 ký tự."
     ]);
-
     exit;
 }
 
-
+try {
 
     $stmt = $pdo->prepare("
         SELECT id
@@ -57,52 +45,28 @@ if (strlen($password) < 6) {
     $stmt->execute([$email]);
 
     if ($stmt->fetch()) {
-
         echo json_encode([
             "success" => false,
-            "message" => "Email đã được sử dụng."
+            "message" => "Email này đã được đăng ký."
         ]);
-
         exit;
     }
 
-
-
-    $password_hash = password_hash(
-        $password,
-        PASSWORD_DEFAULT
-    );
-
-
+    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
     $stmt = $pdo->prepare("
         INSERT INTO users
-        (
-            name,
-            email,
-            phone,
-            password_hash,
-            role
-        )
-        VALUES
-        (
-            ?,
-            ?,
-            ?,
-            ?,
-            'user'
-        )
+        (name, email, phone, password_hash, role)
+        VALUES (?, ?, ?, ?, 'user')
     ");
 
     $stmt->execute([
         $name,
         $email,
         $phone,
-        $password_hash
+        $passwordHash
     ]);
 
-
-    
     echo json_encode([
         "success" => true,
         "message" => "Đăng ký tài khoản thành công."

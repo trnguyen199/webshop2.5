@@ -5,6 +5,8 @@ if (!isset($_SESSION["user_id"])) {
     header("Location: ../auth/login.php");
     exit;
 }
+
+$userName = $_SESSION["user_name"] ?? "Bạn";
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +29,8 @@ if (!isset($_SESSION["user_id"])) {
 
         <div class="sidebar-title">
             <h2>Tài khoản</h2>
-            <p id="sidebarName">Xin chào</p>
+            <p id="sidebarName">Xin chào, <?php echo htmlspecialchars($userName); ?>
+        </p>    
         </div>
 
         <button class="menu-item active" onclick="showSection('profile', this)">
@@ -68,16 +71,6 @@ if (!isset($_SESSION["user_id"])) {
 
             <div class="card profile-card">
 
-                <div class="avatar-area">
-
-                    <div class="avatar" id="avatar">
-                        👤
-                    </div>
-
-                    <p>Ảnh đại diện</p>
-
-                </div>
-
 
                 <div class="profile-form">
 
@@ -98,11 +91,11 @@ if (!isset($_SESSION["user_id"])) {
 
                         <label>Email</label>
 
-                        <input
-                            type="email"
-                            id="profileEmail"
-                            disabled
-                        >
+                    <input
+                         type="email"
+                         id="profileEmail"
+                        placeholder="Nhập email"
+                    >       
 
                     </div>
 

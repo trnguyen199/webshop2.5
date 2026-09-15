@@ -1,3 +1,4 @@
+console.log("AUTH JS VERSION 2.0 ĐANG CHẠY");
 function togglePassword(inputId, button) {
     const input = document.getElementById(inputId);
     if (!input) return;
@@ -47,24 +48,19 @@ if (loginForm) {
         const password = document.getElementById("loginPassword").value;
 
         let valid = true;
+            if (email === "") {
+         showMessage("loginMessage", "Vui lòng nhập email.", "error");
+             valid = false;
+}
 
-        if (email === "") {
-            document.getElementById("loginEmailError").textContent = "Vui lòng nhập email.";
+            if (password === "") {
+    showMessage("loginMessage", "Vui lòng nhập mật khẩu.", "error");
             valid = false;
-        } else {
-            document.getElementById("loginEmailError").textContent = "";
-        }
+}
 
-        if (password === "") {
-            document.getElementById("loginPasswordError").textContent = "Vui lòng nhập mật khẩu.";
-            valid = false;
-        } else {
-            document.getElementById("loginPasswordError").textContent = "";
-        }
+            if (!valid) return;
 
-        if (!valid) return;
-
-        showMessage("loginMessage", "Đang xử lý đăng nhập...", "info");
+    showMessage("loginMessage", "Đang xử lý đăng nhập...", "info");
 
         try {
     const response = await fetch("../api/login.php", {
@@ -103,12 +99,11 @@ if (registerForm) {
 
         clearMessage("registerMessage");
 
-        const name = document.getElementById("registerName").value.trim();
+        const name = document.getElementById("fullName").value.trim();
         const email = document.getElementById("registerEmail").value.trim();
-        const phone = document.getElementById("registerPhone").value.trim();
+        const phone = document.getElementById("phone").value.trim();
         const password = document.getElementById("registerPassword").value;
-        const confirmPassword =
-            document.getElementById("registerConfirmPassword").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
 
         // Kiểm tra
         if (name === "") {
@@ -137,31 +132,18 @@ if (registerForm) {
         }
 
         if (password.length < 6) {
-            showMessage(
-                "registerMessage",
-                "Mật khẩu phải có ít nhất 6 ký tự.",
-                "error"
-            );
+            showMessage("registerMessage", "Mật khẩu phải có ít nhất 6 ký tự.", "error");
             return;
         }
 
         if (password !== confirmPassword) {
-            showMessage(
-                "registerMessage",
-                "Mật khẩu nhập lại không khớp.",
-                "error"
-            );
+            showMessage("registerMessage", "Mật khẩu nhập lại không khớp.", "error");
             return;
         }
 
-        showMessage(
-            "registerMessage",
-            "Đang xử lý đăng ký...",
-            "info"
-        );
+        showMessage("registerMessage", "Đang xử lý đăng ký...", "info");
 
         try {
-
             const response = await fetch("../api/register.php", {
                 method: "POST",
                 headers: {
@@ -184,17 +166,22 @@ if (registerForm) {
 
                 showMessage(
                     "registerMessage",
-                    data.message,
+                    (data.message || "Đăng ký thành công!") + " Đang chuyển hướng sang đăng nhập...",
                     "success"
                 );
 
                 registerForm.reset();
 
+                // THÊM ĐOẠN NÀY ĐỂ TỰ ĐỘNG CHUYỂN SANG TRANG LOGIN SAU 1.5 GIÂY
+                setTimeout(() => {
+                    window.location.href = "login.php";
+                }, 1500);
+
             } else {
 
                 showMessage(
                     "registerMessage",
-                    data.message,
+                    data.message || "Đăng ký thất bại.",
                     "error"
                 );
             }

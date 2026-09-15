@@ -1,194 +1,93 @@
-<!DOCTYPE html>
-<html lang="vi">
+<?php
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+header("Content-Type: application/json; charset=UTF-8");
 
-    <title>Đăng ký tài khoản</title>
+require_once "../config/db.php";
 
-    <link rel="stylesheet" href="auth.css">
-</head>
+$name = trim($_POST["name"] ?? "");
+$email = trim($_POST["email"] ?? "");
+$phone = trim($_POST["phone"] ?? "");
+$password = $_POST["password"] ?? "";
 
-<body>
+if ($name === "" || $email === "" || $phone === "" || $password === "") {
+    echo json_encode([
+        "success" => false,
+        "message" => "Vui lòng nhập đầy đủ thông tin."
+    ]);
+    exit;
+}
 
-    <div class="auth-container">
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Email không hợp lệ."
+    ]);
+    exit;
+}
 
-        <div class="auth-box">
+if (strlen($password) < 6) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Mật khẩu phải có ít nhất 6 ký tự."
+    ]);
+    exit;
+}
 
-            <h1>Đăng ký</h1>
+try {
 
-            <p class="auth-subtitle">
-                Tạo tài khoản mới
-            </p>
+    // Kiểm tra email đã tồn tại chưa
+    $stmt = $pdo->prepare("
+        SELECT id
+        FROM users
+        WHERE email = ?
+        LIMIT 1
+    ");
 
+    $stmt->execute([$email]);
 
-            <form id="registerForm">
+    if ($stmt->fetch()) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Email này đã được đăng ký."
+        ]);
+        exit;
+    }
 
-                <!-- HỌ TÊN -->
-                <div class="form-group">
+    // Mã hóa mật khẩu
+    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
-                    <label for="registerName">
-                        Họ và tên
-                    </label>
+    // Thêm tài khoản
+    $stmt = $pdo->prepare("
+        INSERT INTO users
+        (
+            name,
+            email,
+            phone,
+            password_hash,
+            role
+        )
+        VALUES (?, ?, ?, ?, 'user')
+    ");
 
-                    <input
-                        type="text"
-                        id="registerName"
-                        name="name"
-                        placeholder="Nhập họ và tên"
-                    >
+    $stmt->execute([
+        $name,
+        $email,
+        $phone,
+        $passwordHash
+    ]);
 
-                    <small
-                        id="registerNameError"
-                        class="error-message">
-                    </small>
+    echo json_encode([
+        "success" => true,
+        "message" => "Đăng ký tài khoản thành công."
+    ]);
 
-                </div>
+} catch (PDOException $e) {
 
+    echo json_encode([
+        "success" => false,
+        "message" => "Lỗi database: " . $e->getMessage()
+    ]);
+}
 
-                <!-- EMAIL -->
-                <div class="form-group">
-
-                    <label for="registerEmail">
-                        Email
-                    </label>
-
-                    <input
-                        type="email"
-                        id="registerEmail"
-                        name="email"
-                        placeholder="Nhập email"
-                    >
-
-                    <small
-                        id="registerEmailError"
-                        class="error-message">
-                    </small>
-
-                </div>
-
-
-                <!-- SỐ ĐIỆN THOẠI -->
-                <div class="form-group">
-
-                    <label for="registerPhone">
-                        Số điện thoại
-                    </label>
-
-                    <input
-                        type="text"
-                        id="registerPhone"
-                        name="phone"
-                        placeholder="Nhập số điện thoại"
-                    >
-
-                    <small
-                        id="registerPhoneError"
-                        class="error-message">
-                    </small>
-
-                </div>
-
-
-                <!-- MẬT KHẨU -->
-                <div class="form-group">
-
-                    <label for="registerPassword">
-                        Mật khẩu
-                    </label>
-
-                    <div class="password-wrapper">
-
-                        <input
-                            type="password"
-                            id="registerPassword"
-                            name="password"
-                            placeholder="Nhập mật khẩu"
-                        >
-
-                        <button
-                            type="button"
-                            onclick="togglePassword('registerPassword', this)">
-                            👁
-                        </button>
-
-                    </div>
-
-                    <small
-                        id="registerPasswordError"
-                        class="error-message">
-                    </small>
-
-                </div>
-
-
-                <!-- NHẬP LẠI MẬT KHẨU -->
-                <div class="form-group">
-
-                    <label for="registerConfirmPassword">
-                        Nhập lại mật khẩu
-                    </label>
-
-                    <div class="password-wrapper">
-
-                        <input
-                            type="password"
-                            id="registerConfirmPassword"
-                            name="confirmPassword"
-                            placeholder="Nhập lại mật khẩu"
-                        >
-
-                        <button
-                            type="button"
-                            onclick="togglePassword('registerConfirmPassword', this)">
-                            👁
-                        </button>
-
-                    </div>
-
-                    <small
-                        id="registerConfirmPasswordError"
-                        class="error-message">
-                    </small>
-
-                </div>
-
-
-                <!-- THÔNG BÁO -->
-                <div
-                    id="registerMessage"
-                    class="message">
-                </div>
-
-
-                <!-- NÚT ĐĂNG KÝ -->
-                <button
-                    type="submit"
-                    class="auth-button">
-                    Đăng ký
-                </button>
-
-            </form>
-
-
-            <p class="auth-footer">
-
-                Đã có tài khoản?
-
-                <a href="login.php">
-                    Đăng nhập
-                </a>
-
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <script src="auth.js"></script>
-
-</body>
-
-</html>
+exit;
+?>
